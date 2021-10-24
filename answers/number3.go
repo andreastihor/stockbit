@@ -11,11 +11,11 @@ func FindStringInsideFirstBracket(str string) (res string) {
 	if len(str) > 0 {
 		firstOpeningBracketIndex := strings.Index(str, "(")
 		if firstOpeningBracketIndex >= 0 {
-			remainingWord := str[firstOpeningBracketIndex:]
-			firstClosingBracketIndex := strings.Index(remainingWord, ")")
+			remainingStr := str[firstOpeningBracketIndex:]
+			firstClosingBracketIndex := strings.Index(remainingStr, ")")
 			if firstClosingBracketIndex > 0 {
-				WordInsideBracketLength := firstOpeningBracketIndex + firstClosingBracketIndex
-				return str[firstOpeningBracketIndex+1 : WordInsideBracketLength]
+				lenOfStrInsideBracket := firstOpeningBracketIndex + firstClosingBracketIndex
+				return str[firstOpeningBracketIndex+1 : lenOfStrInsideBracket]
 			}
 
 		}
