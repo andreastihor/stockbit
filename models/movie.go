@@ -17,7 +17,6 @@ type IMDBMovieRequest struct {
 type Params struct {
 	Pagination string `schema:"page"`
 	Search     string `schema:"s"`
-	APIKey     string `schema:"apikey"`
 }
 
 type Movie struct {

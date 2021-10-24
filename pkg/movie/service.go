@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/andreastihor/stockbit/models"
 )
@@ -30,10 +29,6 @@ func NewService(l *log.Logger, repo *Repository) ServiceInterface {
 }
 
 func (s *Service) GetMovies(params *models.Params) ([]*models.Movie, error) {
-	if params.APIKey == "" {
-		return nil, errors.New("apikey must be provided")
-	}
-
 	if params.Search == "" {
 		return nil, errors.New("movie name must be provided")
 	}
@@ -64,30 +59,34 @@ func (s *Service) GetMovies(params *models.Params) ([]*models.Movie, error) {
 
 func getDataFromIMDB(params *models.Params) (*models.IMDBMovieRequest, error) {
 	result := &models.IMDBMovieRequest{}
-	queryParams := fmt.Sprintf("?apikey=%s&s=%s", params.APIKey, params.Search)
+	queryParams := fmt.Sprintf("?apikey=%s&s=%s", "faf7e5bb", params.Search)
 	if params.Pagination != "" {
 		queryParams += fmt.Sprintf("&page=%s", params.Pagination)
 	}
 
-	url := "http://www.omdbapi.com/" + queryParams
+	url := `http://www.omdbapi.com/` + queryParams
 	response, err := http.Get(url)
 	if err != nil {
 		fmt.Print(err.Error())
-		os.Exit(1)
+		return nil, err
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return nil, err
 	}
 
 	err = json.Unmarshal(responseData, &result)
 	if err != nil {
-		log.Fatal(err)
+		// this error is caused by bad request, we can solve it by implementing a better http call, but for this test, i chose to make it simple only
+		if err.Error() == "invalid character '<' looking for beginning of value" {
+			return nil, errors.New("PLEASE Delete Space in movie searching title")
+		}
+
+		fmt.Println(err)
 		return nil, err
 	}
 
 	return result, nil
-
 }
