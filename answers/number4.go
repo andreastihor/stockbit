@@ -6,6 +6,13 @@ import (
 )
 
 func main() {
+	groupedWords := Anagram()
+	for _, v := range groupedWords {
+		fmt.Println(v)
+	}
+}
+
+func Anagram() map[string][]string {
 	listOfWords := []string{"kita", "atik", "tika", "aku", "kia", "makan", "kua"}
 	groupedWords := make(map[string][]string)
 
@@ -14,9 +21,7 @@ func main() {
 		groupedWords[sorted] = append(groupedWords[sorted], word)
 	}
 
-	for _, v := range groupedWords {
-		fmt.Println(v)
-	}
+	return groupedWords
 
 }
 
