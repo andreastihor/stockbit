@@ -10,6 +10,7 @@ import (
 
 	"github.com/andreastihor/stockbit/config"
 	"github.com/andreastihor/stockbit/pkg/movie"
+	routes "github.com/andreastihor/stockbit/router"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
@@ -45,8 +46,9 @@ func main() {
 	}
 
 	repo := movie.NewRepository(db)
-	service := movie.NewService(l, repo)
-	movie.NewHandler(router, service)
+	service := movie.NewService(repo)
+	handler := movie.NewHandler(service)
+	routes.NewRouter(router, handler)
 
 	// create a new server
 	s := http.Server{

@@ -5,15 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/andreastihor/stockbit/models"
 )
 
 type Service struct {
-	logger     *log.Logger
-	Repository *Repository
+	Repository RepositoryInterface
 }
 
 type ServiceInterface interface {
@@ -21,9 +19,8 @@ type ServiceInterface interface {
 }
 
 // NewService will initialize the service for  user endpoint
-func NewService(l *log.Logger, repo *Repository) ServiceInterface {
+func NewService(repo RepositoryInterface) ServiceInterface {
 	return &Service{
-		logger:     l,
 		Repository: repo,
 	}
 }

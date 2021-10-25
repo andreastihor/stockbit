@@ -5,7 +5,6 @@ import (
 
 	"github.com/andreastihor/stockbit/helper"
 	"github.com/andreastihor/stockbit/models"
-	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 )
 
@@ -13,14 +12,17 @@ type Handler struct {
 	Service ServiceInterface
 }
 
+type HandlerInterface interface {
+	GetMovies(w http.ResponseWriter, r *http.Request)
+}
+
 // NewHandler will initialize the user endpoint
-func NewHandler(router *mux.Router, service ServiceInterface) {
+func NewHandler(service ServiceInterface) HandlerInterface {
 	movieHandler := &Handler{
 		Service: service,
 	}
 
-	clientrouter := router.PathPrefix("/api/").Subrouter()
-	clientrouter.HandleFunc("/movies", movieHandler.GetMovies).Methods("GET")
+	return movieHandler
 }
 
 // GetMovies

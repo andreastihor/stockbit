@@ -10,8 +10,12 @@ type Repository struct {
 	DB *gorm.DB
 }
 
+type RepositoryInterface interface {
+	InsertMovie(movie models.Movie) error
+}
+
 //NewRepository ...
-func NewRepository(db *gorm.DB) *Repository {
+func NewRepository(db *gorm.DB) RepositoryInterface {
 	return &Repository{db}
 }
 
