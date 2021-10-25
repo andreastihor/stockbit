@@ -13,7 +13,7 @@ type Handler struct {
 }
 
 type HandlerInterface interface {
-	GetMovies(w http.ResponseWriter, r *http.Request)
+	HandleGetMovie(w http.ResponseWriter, r *http.Request)
 }
 
 // NewHandler will initialize the user endpoint
@@ -25,8 +25,8 @@ func NewHandler(service ServiceInterface) HandlerInterface {
 	return movieHandler
 }
 
-// GetMovies
-func (h *Handler) GetMovies(w http.ResponseWriter, r *http.Request) {
+// HandleGetMovie
+func (h *Handler) HandleGetMovie(w http.ResponseWriter, r *http.Request) {
 	params := &models.Params{}
 	err := r.ParseForm()
 	if err != nil {
