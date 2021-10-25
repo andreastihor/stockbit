@@ -1,0 +1,25 @@
+
+syntax = "proto3";
+
+option go_package = "/models";
+
+package movie;
+
+// Creates an item in the database
+service Service {
+    rpc GetMovies(Params) returns (Movie);
+}
+
+
+message Params {
+ string pagination =1 [json_name="page"];
+ string search =2 [json_name="search"];
+}
+
+message Movie {
+    string                    title         = 1 [json_name="title"];  
+	string                    year       = 2 [json_name="year"];
+	string                    imdbID    = 3 [json_name="imdbID"];
+    string                    type      = 4 [json_name="type"];
+	string                    poster   = 5 [json_name="poster"];
+}
