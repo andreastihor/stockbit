@@ -7,12 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAnagramSuccess(t *testing.T) {
-	groupedWords := Anagram()
-	assert.Equal(t, len(groupedWords), 4, fmt.Sprintf("Wrong result : %d, expected = '4'", len(groupedWords)))
-}
+func TestAnagram(t *testing.T) {
+	t.Run("When Successfully Group Anagram", func(t *testing.T) {
+		groupedWords := Anagram()
+		assert.Equal(t, len(groupedWords), 4, fmt.Sprintf("Wrong result : %d, expected = '4'", len(groupedWords)))
+	})
 
-func TestAnagramFail(t *testing.T) {
-	groupedWords := Anagram()
-	assert.NotEqual(t, len(groupedWords), 5, fmt.Sprintf("Wrong result : %d, expected = '4'", len(groupedWords)))
+	t.Run("When fail to Group Anagram", func(t *testing.T) {
+		groupedWords := Anagram()
+		assert.Equal(t, len(groupedWords), 4, fmt.Sprintf("Wrong result : %d, expected = '4'", len(groupedWords)))
+	})
+
 }
