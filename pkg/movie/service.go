@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/andreastihor/stockbit/models"
 )
@@ -46,9 +48,11 @@ func (s *Service) GetMovies(params *models.Params) ([]*models.Movie, error) {
 		results = append(results, result)
 	}
 
-	err = s.Repository.InsertMovie(*results[0])
-	if err != nil {
-		return nil, err
+	for _, res := range results {
+		err = s.Repository.InsertMovie(*res)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return results, nil
@@ -56,13 +60,21 @@ func (s *Service) GetMovies(params *models.Params) ([]*models.Movie, error) {
 
 func getDataFromIMDB(params *models.Params) (*models.IMDBMovieRequest, error) {
 	result := &models.IMDBMovieRequest{}
-	queryParams := fmt.Sprintf("?apikey=%s&s=%s", "faf7e5bb", params.Search)
-	if params.Pagination != "" {
-		queryParams += fmt.Sprintf("&page=%s", params.Pagination)
+	req, err := http.NewRequest("GET", "http://www.omdbapi.com/", nil)
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
 	}
 
-	url := `http://www.omdbapi.com/` + queryParams
-	response, err := http.Get(url)
+	q := req.URL.Query()
+	q.Add("apikey", "faf7e5bb")
+	q.Add("s", params.Search)
+	if params.Pagination != "" {
+		q.Add("page", params.Pagination)
+	}
+
+	req.URL.RawQuery = q.Encode()
+	response, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Print(err.Error())
 		return nil, err
