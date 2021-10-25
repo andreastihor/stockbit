@@ -7,16 +7,16 @@ package movie;
 
 // Creates an item in the database
 service Service {
-    rpc GetMovies(Params) returns (Movie);
+    rpc GetMovies(ParamsProto) returns (MovieProto);
 }
 
 
-message Params {
+message ParamsProto{
  string pagination =1 [json_name="page"];
  string search =2 [json_name="search"];
 }
 
-message Movie {
+message MovieProto {
     string                    title         = 1 [json_name="title"];  
 	string                    year       = 2 [json_name="year"];
 	string                    imdbID    = 3 [json_name="imdbID"];

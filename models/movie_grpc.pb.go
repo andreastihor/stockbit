@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	GetMovies(ctx context.Context, in *Params, opts ...grpc.CallOption) (*Movie, error)
+	GetMovies(ctx context.Context, in *ParamsProto, opts ...grpc.CallOption) (*MovieProto, error)
 }
 
 type serviceClient struct {
@@ -29,8 +29,8 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) GetMovies(ctx context.Context, in *Params, opts ...grpc.CallOption) (*Movie, error) {
-	out := new(Movie)
+func (c *serviceClient) GetMovies(ctx context.Context, in *ParamsProto, opts ...grpc.CallOption) (*MovieProto, error) {
+	out := new(MovieProto)
 	err := c.cc.Invoke(ctx, "/movie.Service/GetMovies", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (c *serviceClient) GetMovies(ctx context.Context, in *Params, opts ...grpc.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	GetMovies(context.Context, *Params) (*Movie, error)
+	GetMovies(context.Context, *ParamsProto) (*MovieProto, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -50,7 +50,7 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) GetMovies(context.Context, *Params) (*Movie, error) {
+func (UnimplementedServiceServer) GetMovies(context.Context, *ParamsProto) (*MovieProto, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMovies not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
@@ -67,7 +67,7 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 }
 
 func _Service_GetMovies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Params)
+	in := new(ParamsProto)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func _Service_GetMovies_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/movie.Service/GetMovies",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetMovies(ctx, req.(*Params))
+		return srv.(ServiceServer).GetMovies(ctx, req.(*ParamsProto))
 	}
 	return interceptor(ctx, in, info, handler)
 }
