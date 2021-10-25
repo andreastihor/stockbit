@@ -7,5 +7,5 @@ import (
 
 func NewRouter(router *mux.Router, movieHandler movie.HandlerInterface) {
 	clientRoute := router.PathPrefix("/api/").Subrouter()
-	clientRoute.HandleFunc("/rest/movies", movieHandler.GetMovies).Methods("GET")
+	clientRoute.HandleFunc("/rest/movies", movieHandler.HandleGetMovie).Methods("GET")
 }
