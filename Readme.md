@@ -1,6 +1,4 @@
-To execute Migration Query
-    run : migrate -database YOUR_DATABASE_URL -path ./db/migrations up
-
+Please create database and run the migration query manually on your sql editor
 
 ### Environment Variable Example
 ```sh
